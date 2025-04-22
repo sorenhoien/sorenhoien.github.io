@@ -1,933 +1,170 @@
-firebaseConfig = {
-  apiKey: "AIzaSyC0oaGuIhP3ExBJQxd-2tfW8uSv8agoLF0",
-  authDomain: "crm-lmd.firebaseapp.com",
-  projectId: "crm-lmd",
-  storageBucket: "crm-lmd.firebasestorage.app",
-  messagingSenderId: "644716080926",
-  appId: "1:644716080926:web:dcf3f6cd7f04cf6da0630f"
-};
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Lift Bridge Marine Detailing Pipeline</title> <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet"> <style> body { font-family: 'Roboto', sans-serif; margin: 0; background: url('https://images.unsplash.com/photo-1625237734418-6e1b63d72a3c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed; background-size: cover; color: #ffffff; overflow-x: hidden; position: relative; } body::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(26, 60, 94, 0.8), rgba(74, 111, 158, 0.3)); z-index: -1; } .header { padding: 15px 30px; background: rgba(26, 60, 94, 0.8); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; } .header .company-name { font-size: 20px; font-weight: 600; margin: 0; } .header .pipeline-total { font-size: 18px; font-weight: 500; margin: 0; } .header .add-client-btn { background: linear-gradient(90deg, #4a6f9e, #2a5a8e); border: none; padding: 8px 16px; border-radius: 20px; color: #ffffff; cursor: pointer; transition: transform 0.3s; } .header .add-client-btn:hover { transform: scale(1.05); } .controls { display: flex; justify-content: flex-end; padding: 15px 30px; } .sort-btn { background: linear-gradient(90deg, #4a6f9e, #2a5a8e); border: none; padding: 8px 16px; border-radius: 20px; color: #ffffff; cursor: pointer; transition: transform 0.3s; } .sort-btn:hover { transform: scale(1.05); } .pipeline { display: flex; gap: 15px; padding: 15px 30px; overflow-x: auto; position: relative; } .pipeline::-webkit-scrollbar { height: 8px; } .pipeline::-webkit-scrollbar-thumb { background: #4a6f9e; border-radius: 4px; } .stage { flex: 1; min-width: 280px; background: linear-gradient(135deg, #1a3c5e, #4a6f9e); padding: 15px; border-radius: 12px; backdrop-filter: blur(5px); } .stage-header { background: linear-gradient(90deg, #4a6f9e, #2a5a8e); padding: 12px; border-radius: 8px; margin-bottom: 15px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); } .stage-header h2 { margin: 0; font-size: 18px; font-weight: 600; color: #ffffff; } .stage-header span { font-size: 14px; color: rgba(255, 255, 255, 0.8); } .wave-icon::before { content: '🌊'; margin-right: 5px; } .card { background: rgba(255, 255, 255, 0.95); padding: 10px; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); border: 1px solid rgba(74, 111, 158, 0.5); opacity: 0; transform: translateY(10px); animation: fadeInUp 0.4s forwards; display: flex; flex-direction: column; gap: 5px; backdrop-filter: blur(5px); transition: transform 0.2s ease, box-shadow 0.2s ease; } @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } } .card:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); } .card h3 { margin: 0; font-size: 14px; font-weight: 500; color: #1a3c5e; display: flex; align-items: center; gap: 5px; cursor: pointer; } .card h3::before { content: '🚤'; font-size: 12px; } .card .amount { font-size: 12px; font-weight: 600; color: #28a745; margin: 0; } .card-actions { display: flex; justify-content: space-between; margin-top: 5px; } .card-actions button { padding: 4px 8px; font-size: 12px; border-radius: 4px; cursor: pointer; background: linear-gradient(90deg, #4a6f9e, #2a5a8e); color: white; border: none; transition: background 0.2s, opacity 0.2s; } .card-actions button:disabled { opacity: 0.5; cursor: not-allowed; } .card-actions button:hover:not(:disabled) { background: linear-gradient(90deg, #2a5a8e, #4a6f9e); } .dropzone { min-height: 50px; } .input-group { margin: 15px 30px; display: flex; flex-wrap: wrap; gap: 15px; background: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 12px; font-family: 'Roboto', sans-serif; font-size: 16px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); } input, select, textarea { padding: 8px; margin-right: 10px; border: 1px solid #ddd; border-radius: 6px; font-family: 'Roboto', sans-serif; font-size: 16px; background: #f8f9fa; } textarea { width: 100%; max-width: 300px; height: 60px; } button { padding: 8px 16px; border-radius: 6px; cursor: pointer; background: linear-gradient(90deg, #4a6f9e, #2a5a8e); color: white; border: none; transition: background 0.3s; } button:hover { background: linear-gradient(90deg, #2a5a8e, #4a6f9e); } .sidebar { position: fixed; top: 0; right: 0; width: 400px; height: 100%; background: linear-gradient(135deg, rgba(26, 60, 94, 0.8), rgba(74, 111, 158, 0.5)); backdrop-filter: blur(10px); box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3); padding: 20px; color: #ffffff; overflow-y: auto; z-index: 10; display: none; opacity: 0; transform: scale(0.95); transform-origin: top right; transition: opacity 0.3s ease, transform 0.3s ease; } .sidebar.open { display: block; opacity: 1; transform: scale(1); } .sidebar.closing { opacity: 0; transform: scale(0.95); } .sidebar textarea, .sidebar input { width: 100%; margin-top: 5px; background: rgba(255, 255, 255, 0.2); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); } .sidebar-header { display: flex; align-items: center; gap: 10px; } .back-arrow { cursor: pointer; font-size: 20px; color: #ffffff; transition: transform 0.3s; } .back-arrow:hover { transform: translateX(-5px); } .close-btn { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 20px; color: #ffffff; } .photo-gallery { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; } .photo-gallery img { width: 100px; height: 100px; object-fit: cover; border-radius: 5px; border: 1px solid rgba(255, 255, 255, 0.3); } </style> </head> <body> <div class="header"> <h1 class="company-name">Lift Bridge Marine Detailing</h1> <button id="addClientHeaderBtn" class="add-client-btn">Add Client</button> <h1 class="pipeline-total">Total Pipeline (Scheduling+): <span id="totalPipeline">$0.00</span></h1> </div> <div class="controls"> <button class="sort-btn">Sort by Name</button> </div> <div class="input-group" id="inputForm"> <input type="text" id="firstName" placeholder="First Name" required> <input type="text" id="lastName" placeholder="Last Name" required> <input type="text" id="boat" placeholder="Boat Make/Model" required> <input type="date" id="dateScheduled" placeholder="Date Scheduled"> <textarea id="service" placeholder="Service Requested/Performed"></textarea> <textarea id="notes" placeholder="General Notes"></textarea> <input type="number" id="amount" placeholder="Amount" step="0.01" min="0"> <select id="paymentMethod"> <option value="">Method of Payment</option> <option value="Cash">Cash</option> <option value="Credit Card">Credit Card</option> <option value="Check">Check</option> <option value="Online">Online</option> </select> <select id="status"> <option value="New">New</option> <option value="Quoted">Quoted</option> <option value="Scheduling">Scheduling</option> <option value="Scheduled">Scheduled</option> <option value="Completed">Completed</option> <option value="Closed">Closed</option> </select> <button id="addClientBtn">Add Client</button> <button id="saveBtn">Save</button> </div> <div class="pipeline"> <div class="stage" data-status="New"> <div class="stage-header"> <h2 class="wave-icon">New (<span id="countNew">0</span>) - <span id="totalNew">$0.00</span></h2> </div> <div class="dropzone"></div> </div> <div class="stage" data-status="Quoted"> <div class="stage-header"> <h2 class="wave-icon">Quoted (<span id="countQuoted">0</span>) - <span id="totalQuoted">$0.00</span></h2> </div> <div class="dropzone"></div> </div> <div class="stage" data-status="Scheduling"> <div class="stage-header"> <h2 class="wave-icon">Scheduling (<span id="countScheduling">0</span>) - <span id="totalScheduling">$0.00</span></h2> </div> <div class="dropzone"></div> </div> <div class="stage" data-status="Scheduled"> <div class="stage-header"> <h2 class="wave-icon">Scheduled (<span id="countScheduled">0</span>) - <span id="totalScheduled">$0.00</span></h2> </div> <div class="dropzone"></div> </div> <div class="stage" data-status="Completed"> <div class="stage-header"> <h2 class="wave-icon">Completed (<span id="countCompleted">0</span>) - <span id="totalCompleted">$0.00</span></h2> </div> <div class="dropzone"></div> </div> <div class="stage" data-status="Closed"> <div class="stage-header"> <h2 class="wave-icon">Closed (<span id="countClosed">0</span>) - <span id="totalClosed">$0.00</span></h2> </div> <div class="dropzone"></div> </div> </div> <div class="sidebar" id="sidebar"> <span class="close-btn">×</span> <div class="sidebar-header"> <span class="back-arrow">←</span> <h2>Client Details</h2> </div> <div id="sidebarContent"></div> </div> <script> console.log('Script loaded'); var clients = JSON.parse(localStorage.getItem('clients')) || [ { firstName: "John", lastName: "Smith", boat: "Sea Ray 240", dateScheduled: "2025-04-15", service: "Full detailing and wax", notes: "Client prefers eco-friendly products", amount: 1200.00, datePaid: "", paymentMethod: "", status: "New", address: "123 Lake St, Minneapolis, MN", phone: "555-123-4567", email: "john.smith@email.com", other: "", photos: [] }, { firstName: "Emily", lastName: "Johnson", boat: "Chaparral 21 SSi", dateScheduled: "2025-04-20", service: "Interior cleaning", notes: "Focus on upholstery", amount: 800.00, datePaid: "", paymentMethod: "", status: "Quoted", address: "456 River Rd, St. Paul, MN", phone: "555-987-6543", email: "emily.j@email.com", other: "VIP client", photos: [] }, { firstName: "Michael", lastName: "Brown", boat: "Bayliner 185", dateScheduled: "2025-04-25", service: "Exterior wash and polish", notes: "Boat stored at marina", amount: 600.00, datePaid: "", paymentMethod: "", status: "Scheduled", address: "789 Marina Dr, Duluth, MN", phone: "555-456-7890", email: "michael.brown@email.com", other: "", photos: [] } ]; var selectedClientIndex = null; var stages = ["New", "Quoted", "Scheduling", "Scheduled", "Completed", "Closed"]; function formatCurrency(amount) { try { return "$" + Number(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); } catch (e) { console.error('Format currency failed:', e); return "$0.00"; } } function formatDate(dateStr) { try { if (!dateStr) return ''; var date = new Date(dateStr); if (isNaN(date)) return dateStr; return date.getDate().toString().padStart(2, '0') + '/' + (date.getMonth() + 1).toString().padStart(2, '0') + '/' + date.getFullYear(); } catch (e) { console.error('Format date failed:', e); return dateStr; } } function parseDate(dateStr) { try { if (!dateStr) return ''; var parts = dateStr.split('/'); return parts[2] + '-' + parts[1] + '-' + parts[0]; } catch (e) { console.error('Parse date failed:', e); return ''; } } function saveClients() { try { console.log('Save button clicked'); localStorage.setItem('clients', JSON.stringify(clients)); renderClients(); updateTotals(); if (selectedClientIndex !== null) { renderSidebar(selectedClientIndex); } } catch (e) { console.error('Save failed:', e); alert('Error saving clients: ' + e.message); } } function toggleInputForm() { try { console.log('Header Add Client button clicked'); var inputForm = document.getElementById('inputForm'); if (!inputForm) { console.error('Input form not found'); alert('Error: Input form not found'); return; } inputForm.style.display = inputForm.style.display === 'flex' ? 'none' : 'flex'; console.log('Form display set to:', inputForm.style.display); } catch (e) { console.error('Toggle form failed:', e); alert('Error toggling form: ' + e.message); } } function addClient() { try { console.log('Add Client button clicked'); var firstName = document.getElementById('firstName').value.trim(); var lastName = document.getElementById('lastName').value.trim(); var boat = document.getElementById('boat').value.trim(); var dateScheduled = document.getElementById('dateScheduled').value; var service = document.getElementById('service').value; var notes = document.getElementById('notes').value; var amount = parseFloat(document.getElementById('amount').value) || 0; var paymentMethod = document.getElementById('paymentMethod').value; var status = document.getElementById('status').value || 'New'; if (firstName && lastName && boat) { clients.push({ firstName: firstName, lastName: lastName, boat: boat, dateScheduled: formatDate(dateScheduled), service: service, notes: notes, amount: amount, datePaid: '', paymentMethod: paymentMethod, status: status, address: '', phone: '', email: '', other: '', photos: [] }); document.getElementById('firstName').value = ''; document.getElementById('lastName').value = ''; document.getElementById('boat').value = ''; document.getElementById('dateScheduled').value = ''; document.getElementById('service').value = ''; document.getElementById('notes').value = ''; document.getElementById('amount').value = ''; document.getElementById('paymentMethod').value = ''; document.getElementById('status').value = 'New'; saveClients(); toggleInputForm(); } else { console.log('Validation failed: Missing required fields'); alert('Please fill in First Name, Last Name, and Boat Make/Model.'); } } catch (e) { console.error('Add client failed:', e); alert('Error adding client: ' + e.message); } } function sortClients() { try { console.log('Sort by Name clicked'); clients.sort(function(a, b) { return (a.lastName + ' ' + a.firstName).localeCompare(b.lastName + ' ' + b.firstName); }); saveClients(); } catch (e) { console.error('Sort failed:', e); } } function updateClient(index, field, value) { try { if (field === 'amount') { value = parseFloat(value) || 0; } if (field === 'dateScheduled' || field === 'datePaid') { value = formatDate(value); } clients[index][field] = value; saveClients(); } catch (e) { console.error('Update client failed:', e); } } function moveClient(index, direction) { try { var currentStageIndex = stages.indexOf(clients[index].status); var newStageIndex = direction === 'forward' ? currentStageIndex + 1 : currentStageIndex - 1; if (newStageIndex >= 0 && newStageIndex < stages.length) { clients[index].status = stages[newStageIndex]; saveClients(); } } catch (e) { console.error('Move client failed:', e); } } function renderClients() { try { var stageElements = document.querySelectorAll('.stage'); stageElements.forEach(function(stage) { var dropzone = stage.querySelector('.dropzone'); dropzone.innerHTML = ''; var status = stage.dataset.status; clients.filter(function(client) { return client.status === status; }).forEach(function(client, index) { var globalIndex = clients.findIndex(function(c) { return c.firstName === client.firstName && c.lastName === client.lastName && c.boat === client.boat; }); var card = document.createElement('div'); card.className = 'card'; card.dataset.index = globalIndex; var isFirstStage = status === 'New'; var isLastStage = status === 'Closed'; card.innerHTML = '<h3>' + client.boat + '</h3>' + '<p class="amount">' + formatCurrency(client.amount) + '</p>' + '<div class="card-actions">' + '<button ' + (isFirstStage ? 'disabled' : '') + '>←</button>' + '<button ' + (isLastStage ? 'disabled' : '') + '>→</button>' + '</div>'; card.querySelector('h3').addEventListener('click', function() { openSidebar(globalIndex); }); var buttons = card.querySelectorAll('.card-actions button'); buttons[0].addEventListener('click', function() { moveClient(globalIndex, 'backward'); }); buttons[1].addEventListener('click', function() { moveClient(globalIndex, 'forward'); }); dropzone.appendChild(card); }); }); } catch (e) { console.error('Render clients failed:', e); } } function updateTotals() { try { var counts = { New: 0, Quoted: 0, Scheduling: 0, Scheduled: 0, Completed: 0, Closed: 0 }; var totals = { New: 0, Quoted: 0, Scheduling: 0, Scheduled: 0, Completed: 0, Closed: 0 }; var pipelineTotal = 0; clients.forEach(function(client) { counts[client.status]++; totals[client.status] += parseFloat(client.amount) || 0; if (["Scheduling", "Scheduled", "Completed"].indexOf(client.status) !== -1) { pipelineTotal += parseFloat(client.amount) || 0; } }); document.getElementById('countNew').textContent = counts.New; document.getElementById('countQuoted').textContent = counts.Quoted; document.getElementById('countScheduling').textContent = counts.Scheduling; document.getElementById('countScheduled').textContent = counts.Scheduled; document.getElementById('countCompleted').textContent = counts.Completed; document.getElementById('countClosed').textContent = counts.Closed; document.getElementById('totalNew').textContent = formatCurrency(totals.New); document.getElementById('totalQuoted').textContent = formatCurrency(totals.Quoted); document.getElementById('totalScheduling').textContent = formatCurrency(totals.Scheduling); document.getElementById('totalScheduled').textContent = formatCurrency(totals.Scheduled); document.getElementById('totalCompleted').textContent = formatCurrency(totals.Completed); document.getElementById('totalClosed').textContent = formatCurrency(totals.Closed); document.getElementById('totalPipeline').textContent = formatCurrency(pipelineTotal); } catch (e) { console.error('Update totals failed:', e); } } function deleteClient(index) { try { clients.splice(index, 1); saveClients(); closeSidebar(); } catch (e) { console.error('Delete client failed:', e); } } function openSidebar(index) { try { selectedClientIndex = index; var sidebar = document.getElementById('sidebar'); sidebar.classList.remove('closing'); sidebar.classList.add('open'); renderSidebar(index); } catch (e) { console.error('Open sidebar failed:', e); } } function closeSidebar() { try { var sidebar = document.getElementById('sidebar'); sidebar.classList.remove('open'); sidebar.classList.add('closing'); setTimeout(function() { if (!sidebar.classList.contains('open')) { sidebar.style.display = 'none'; } }, 300); selectedClientIndex = null; } catch (e) { console.error('Close sidebar failed:', e); } } function addPhoto(index, file) { try { var reader = new FileReader(); reader.onload = function(e) { if (!clients[index].photos) { clients[index].photos = []; } clients[index].photos.push(e.target.result); saveClients(); }; reader.readAsDataURL(file); } catch (e) { console.error('Add photo failed:', e); } } function deletePhoto(index, photoIndex) { try { clients[index].photos.splice(photoIndex, 1); saveClients(); } catch (e) { console.error('Delete photo failed:', e); } } function renderSidebar(index) { try { var client = clients[index]; var photos = client.photos || []; var sidebarContent = document.getElementById('sidebarContent'); sidebarContent.innerHTML = '<button id="deleteClientBtn">Delete Client</button>' + '<strong>First Name:</strong><br>' + '<input type="text" id="sidebarFirstName" value="' + (client.firstName || '') + '"><br>' + '<strong>Last Name:</strong><br>' + '<input type="text" id="sidebarLastName" value="' + (client.lastName || '') + '"><br>' + '<strong>Boat Make/Model:</strong><br>' + '<input type="text" id="sidebarBoat" value="' + (client.boat || '') + '"><br>' + '<strong>Date Scheduled:</strong><br>' + '<input type="date" id="sidebarDateScheduled" value="' + parseDate(client.dateScheduled) + '"><br>' + '<strong>Service Requested/Performed:</strong><br>' + '<textarea id="sidebarService" placeholder="Service">' + (client.service || '') + '</textarea><br>' +
+'<strong>General Notes:</strong><br>' +
+'<textarea id="sidebarNotes" placeholder="Notes">' + (client.notes || '') + '</textarea><br>' +
+'<strong>Amount:</strong><br>' +
+'<span>$</span><input type="number" id="sidebarAmount" value="' + (client.amount || 0) + '" step="0.01" min="0"><br>' +
+'<strong>Date Paid:</strong><br>' +
+'<input type="date" id="sidebarDatePaid" value="' + parseDate(client.datePaid) + '"><br>' +
+'<strong>Method of Payment:</strong><br>' +
+'<select id="sidebarPaymentMethod">' +
+'<option value="" ' + (client.paymentMethod === '' ? 'selected' : '') + '>Select Method</option>' +
+'<option value="Cash" ' + (client.paymentMethod === 'Cash' ? 'selected' : '') + '>Cash</option>' +
+'<option value="Credit Card" ' + (client.paymentMethod === 'Credit Card' ? 'selected' : '') + '>Credit Card</option>' +
+'<option value="Check" ' + (client.paymentMethod === 'Check' ? 'selected' : '') + '>Check</option>' +
+'<option value="Online" ' + (client.paymentMethod === 'Online' ? 'selected' : '') + '>Online</option>' +
+'</select><br>' +
+'<strong>Address:</strong><br>' +
+'<textarea id="sidebarAddress" placeholder="Address">' + (client.address || '') + '</textarea><br>' +
+'<strong>Phone Number:</strong><br>' +
+'<input type="tel" id="sidebarPhone" value="' + (client.phone || '') + '"><br>' +
+'<strong>Email:</strong><br>' +
+'<input type="email" id="sidebarEmail" value="' + (client.email || '') + '"><br>' +
+'<strong>Other:</strong><br>' +
+'<textarea id="sidebarOther" placeholder="Other Details">' + (client.other || '') + '</textarea><br>' +
+'<strong>Photos:</strong><br>' +
+'<input type="file" id="sidebarPhoto" accept="image/*"><br>' +
+'<div class="photo-gallery">' +
+photos.map(function(photo, photoIndex) {
+return '<div>' +
+'<img src="' + photo + '" alt="Client Photo">' +
+'<button class="deletePhotoBtn" data-photo-index="' + photoIndex + '">Delete</button>' +
+'</div>';
+}).join('') +
+'</div>';
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lift Bridge Marine Detailing Pipeline</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            background: url('https://images.unsplash.com/photo-1625237734418-6e1b63d72a3c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
-            background-size: cover;
-            color: #ffffff;
-            overflow-x: hidden;
-            position: relative;
-        }
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(26, 60, 94, 0.8), rgba(74, 111, 158, 0.3));
-            z-index: -1;
-        }
-        .header {
-            padding: 15px 30px;
-            background: rgba(26, 60, 94, 0.8);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        .header .company-name {
-            font-size: 20px;
-            font-weight: 600;
-            margin: 0;
-        }
-        .header .pipeline-total {
-            font-size: 18px;
-            font-weight: 500;
-            margin: 0;
-        }
-        .header .add-client-btn {
-            background: linear-gradient(90deg, #4a6f9e, #2a5a8e);
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            color: #ffffff;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-        .header .add-client-btn:hover {
-            transform: scale(1.05);
-        }
-        .controls {
-            display: flex;
-            justify-content: flex-end;
-            padding: 15px 30px;
-        }
-        .sort-btn {
-            background: linear-gradient(90deg, #4a6f9e, #2a5a8e);
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            color: #ffffff;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-        .sort-btn:hover {
-            transform: scale(1.05);
-        }
-        .pipeline {
-            display: flex;
-            gap: 15px;
-            padding: 15px 30px;
-            overflow-x: auto;
-            position: relative;
-        }
-        .pipeline::-webkit-scrollbar {
-            height: 8px;
-        }
-        .pipeline::-webkit-scrollbar-thumb {
-            background: #4a6f9e;
-            border-radius: 4px;
-        }
-        .stage {
-            flex: 1;
-            min-width: 280px;
-            background: linear-gradient(135deg, #1a3c5e, #4a6f9e);
-            padding: 15px;
-            border-radius: 12px;
-            backdrop-filter: blur(5px);
-        }
-        .stage-header {
-            background: linear-gradient(90deg, #4a6f9e, #2a5a8e);
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-        }
-        .stage-header h2 {
-            margin: 0;
-            font-size: 18px;
-            font-weight: 600;
-            color: #ffffff;
-        }
-        .stage-header span {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-        .wave-icon::before {
-            content: '🌊';
-            margin-right: 5px;
-        }
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(74, 111, 158, 0.5);
-            opacity: 0;
-            transform: translateY(10px);
-            animation: fadeInUp 0.4s forwards;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            backdrop-filter: blur(5px);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-        }
-        .card h3 {
-            margin: 0;
-            font-size: 14px;
-            font-weight: 500;
-            color: #1a3c5e;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-        }
-        .card h3::before {
-            content: '🚤';
-            font-size: 12px;
-        }
-        .card .amount {
-            font-size: 12px;
-            font-weight: 600;
-            color: #28a745;
-            margin: 0;
-        }
-        .card-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 5px;
-        }
-        .card-actions button {
-            padding: 4px 8px;
-            font-size: 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            background: linear-gradient(90deg, #4a6f9e, #2a5a8e);
-            color: white;
-            border: none;
-            transition: background 0.2s, opacity 0.2s;
-        }
-        .card-actions button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .card-actions button:hover:not(:disabled) {
-            background: linear-gradient(90deg, #2a5a8e, #4a6f9e);
-        }
-        .dropzone {
-            min-height: 50px;
-        }
-        .input-group {
-            margin: 15px 30px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 12px;
-            font-family: 'Roboto', sans-serif;
-            font-size: 16px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        input, select, textarea {
-            padding: 8px;
-            margin-right: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-family: 'Roboto', sans-serif;
-            font-size: 16px;
-            background: #f8f9fa;
-        }
-        textarea {
-            width: 100%;
-            max-width: 300px;
-            height: 60px;
-        }
-        button {
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            background: linear-gradient(90deg, #4a6f9e, #2a5a8e);
-            color: white;
-            border: none;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background: linear-gradient(90deg, #2a5a8e, #4a6f9e);
-        }
-        .sidebar {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 400px;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(26, 60, 94, 0.8), rgba(74, 111, 158, 0.5));
-            backdrop-filter: blur(10px);
-            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            color: #ffffff;
-            overflow-y: auto;
-            z-index: 10;
-            display: none;
-            opacity: 0;
-            transform: scale(0.95);
-            transform-origin: top right;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        .sidebar.open {
-            display: block;
-            opacity: 1;
-            transform: scale(1);
-        }
-        .sidebar.closing {
-            opacity: 0;
-            transform: scale(0.95);
-        }
-        .sidebar textarea, .sidebar input {
-            width: 100%;
-            margin-top: 5px;
-            background: rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        .sidebar-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .back-arrow {
-            cursor: pointer;
-            font-size: 20px;
-            color: #ffffff;
-            transition: transform 0.3s;
-        }
-        .back-arrow:hover {
-            transform: translateX(-5px);
-        }
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            cursor: pointer;
-            font-size: 20px;
-            color: #ffffff;
-        }
-        .photo-gallery {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .photo-gallery img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 5px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1 class="company-name">Lift Bridge Marine Detailing</h1>
-        <button id="addClientHeaderBtn" class="add-client-btn">Add Client</button>
-        <h1 class="pipeline-total">Total Pipeline (Scheduling+): <span id="totalPipeline">$0.00</span></h1>
-    </div>
-    <div class="controls">
-        <button class="sort-btn">Sort by Name</button>
-    </div>
-    <div class="input-group" id="inputForm">
-        <input type="text" id="firstName" placeholder="First Name" required>
-        <input type="text" id="lastName" placeholder="Last Name" required>
-        <input type="text" id="boat" placeholder="Boat Make/Model" required>
-        <input type="date" id="dateScheduled" placeholder="Date Scheduled">
-        <textarea id="service" placeholder="Service Requested/Performed"></textarea>
-        <textarea id="notes" placeholder="General Notes"></textarea>
-        <input type="number" id="amount" placeholder="Amount" step="0.01" min="0">
-        <select id="paymentMethod">
-            <option value="">Method of Payment</option>
-            <option value="Cash">Cash</option>
-            <option value="Credit Card">Credit Card</option>
-            <option value="Check">Check</option>
-            <option value="Online">Online</option>
-        </select>
-        <select id="status">
-            <option value="New">New</option>
-            <option value="Quoted">Quoted</option>
-            <option value="Scheduling">Scheduling</option>
-            <option value="Scheduled">Scheduled</option>
-            <option value="Completed">Completed</option>
-            <option value="Closed">Closed</option>
-        </select>
-        <button id="addClientBtn">Add Client</button>
-        <button id="saveBtn">Save</button>
-    </div>
-    <div class="pipeline">
-        <div class="stage" data-status="New">
-            <div class="stage-header">
-                <h2 class="wave-icon">New (<span id="countNew">0</span>) - <span id="totalNew">$0.00</span></h2>
-            </div>
-            <div class="dropzone"></div>
-        </div>
-        <div class="stage" data-status="Quoted">
-            <div class="stage-header">
-                <h2 class="wave-icon">Quoted (<span id="countQuoted">0</span>) - <span id="totalQuoted">$0.00</span></h2>
-            </div>
-            <div class="dropzone"></div>
-        </div>
-        <div class="stage" data-status="Scheduling">
-            <div class="stage-header">
-                <h2 class="wave-icon">Scheduling (<span id="countScheduling">0</span>) - <span id="totalScheduling">$0.00</span></h2>
-            </div>
-            <div class="dropzone"></div>
-        </div>
-        <div class="stage" data-status="Scheduled">
-            <div class="stage-header">
-                <h2 class="wave-icon">Scheduled (<span id="countScheduled">0</span>) - <span id="totalScheduled">$0.00</span></h2>
-            </div>
-            <div class="dropzone"></div>
-        </div>
-        <div class="stage" data-status="Completed">
-            <div class="stage-header">
-                <h2 class="wave-icon">Completed (<span id="countCompleted">0</span>) - <span id="totalCompleted">$0.00</span></h2>
-            </div>
-            <div class="dropzone"></div>
-        </div>
-        <div class="stage" data-status="Closed">
-            <div class="stage-header">
-                <h2 class="wave-icon">Closed (<span id="countClosed">0</span>) - <span id="totalClosed">$0.00</span></h2>
-            </div>
-            <div class="dropzone"></div>
-        </div>
-    </div>
-    <div class="sidebar" id="sidebar">
-        <span class="close-btn">×</span>
-        <div class="sidebar-header">
-            <span class="back-arrow">←</span>
-            <h2>Client Details</h2>
-        </div>
-        <div id="sidebarContent"></div>
-    </div>
+document.getElementById('deleteClientBtn').addEventListener('click', function() {
+deleteClient(index);
+});
+document.getElementById('sidebarFirstName').addEventListener('blur', function() {
+updateClient(index, 'firstName', this.value);
+});
+document.getElementById('sidebarLastName').addEventListener('blur', function() {
+updateClient(index, 'lastName', this.value);
+});
+document.getElementById('sidebarBoat').addEventListener('blur', function() {
+updateClient(index, 'boat', this.value);
+});
+document.getElementById('sidebarDateScheduled').addEventListener('blur', function() {
+updateClient(index, 'dateScheduled', this.value);
+});
+document.getElementById('sidebarService').addEventListener('blur', function() {
+updateClient(index, 'service', this.value);
+});
+document.getElementById('sidebarNotes').addEventListener('blur', function() {
+updateClient(index, 'notes', this.value);
+});
+document.getElementById('sidebarAmount').addEventListener('blur', function() {
+updateClient(index, 'amount', this.value);
+});
+document.getElementById('sidebarDatePaid').addEventListener('blur', function() {
+updateClient(index, 'datePaid', this.value);
+});
+document.getElementById('sidebarPaymentMethod').addEventListener('change', function() {
+updateClient(index, 'paymentMethod', this.value);
+});
+document.getElementById('sidebarAddress').addEventListener('blur', function() {
+updateClient(index, 'address', this.value);
+});
+document.getElementById('sidebarPhone').addEventListener('blur', function() {
+updateClient(index, 'phone', this.value);
+});
+document.getElementById('sidebarEmail').addEventListener('blur', function() {
+updateClient(index, 'email', this.value);
+});
+document.getElementById('sidebarOther').addEventListener('blur', function() {
+updateClient(index, 'other', this.value);
+});
+document.getElementById('sidebarPhoto').addEventListener('change', function() {
+if (this.files[0]) {
+addPhoto(index, this.files[0]);
+}
+});
+var deletePhotoButtons = sidebarContent.querySelectorAll('.deletePhotoBtn');
+deletePhotoButtons.forEach(function(btn) {
+btn.addEventListener('click', function() {
+var photoIndex = parseInt(this.dataset.photoIndex);
+deletePhoto(index, photoIndex);
+});
+});
+} catch (e) {
+console.error('Render sidebar failed:', e);
+alert('Error rendering sidebar: ' + e.message);
+}
+}
 
-    <script>
-        console.log('Script loaded');
+var pipeline = document.querySelector('.pipeline');
+pipeline.addEventListener('scroll', function() {
+try {
+var scrollPosition = pipeline.scrollLeft;
+document.body.style.backgroundPositionX = '-' + (scrollPosition * 0.2) + 'px';
+} catch (e) {
+console.error('Pipeline scroll failed:', e);
+}
+});
 
-        // Replace with your Firebase config from Firebase Console
-        var firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        var db = firebase.firestore();
+document.addEventListener('DOMContentLoaded', function() {
+console.log('DOM loaded - initializing');
+try {
+var inputForm = document.getElementById('inputForm');
+if (inputForm) {
+inputForm.style.display = 'none';
+console.log('Input form hidden');
+} else {
+console.error('Input form not found on load');
+alert('Error: Input form not found on load');
+}
 
-        var clients = [];
-        var selectedClientId = null;
-        var stages = ["New", "Quoted", "Scheduling", "Scheduled", "Completed", "Closed"];
+var headerBtn = document.getElementById('addClientHeaderBtn');
+if (headerBtn) {
+headerBtn.addEventListener('click', toggleInputForm);
+console.log('Header button listener added');
+} else {
+console.error('Header button not found');
+}
 
-        function formatCurrency(amount) {
-            try {
-                return "$" + Number(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            } catch (e) {
-                console.error('Format currency failed:', e);
-                return "$0.00";
-            }
-        }
+var addClientBtn = document.getElementById('addClientBtn');
+if (addClientBtn) {
+addClientBtn.addEventListener('click', addClient);
+console.log('Add Client button listener added');
+} else {
+console.error('Add Client button not found');
+}
 
-        function formatDate(dateStr) {
-            try {
-                if (!dateStr) return '';
-                var date = new Date(dateStr);
-                if (isNaN(date)) return dateStr;
-                return date.getDate().toString().padStart(2, '0') + '/' + 
-                       (date.getMonth() + 1).toString().padStart(2, '0') + '/' + 
-                       date.getFullYear();
-            } catch (e) {
-                console.error('Format date failed:', e);
-                return dateStr;
-            }
-        }
+var saveBtn = document.getElementById('saveBtn');
+if (saveBtn) {
+saveBtn.addEventListener('click', saveClients);
+console.log('Save button listener added');
+} else {
+console.error('Save button not found');
+}
 
-        function parseDate(dateStr) {
-            try {
-                if (!dateStr) return '';
-                var parts = dateStr.split('/');
-                return parts[2] + '-' + parts[1] + '-' + parts[0];
-            } catch (e) {
-                console.error('Parse date failed:', e);
-                return '';
-            }
-        }
+var sortBtn = document.querySelector('.sort-btn');
+if (sortBtn) {
+sortBtn.addEventListener('click', sortClients);
+console.log('Sort button listener added');
+} else {
+console.error('Sort button not found');
+}
 
-        function saveClients() {
-            try {
-                console.log('Save button clicked');
-                renderClients();
-                updateTotals();
-                if (selectedClientId !== null) {
-                    renderSidebar(selectedClientId);
-                }
-            } catch (e) {
-                console.error('Save failed:', e);
-                alert('Error saving clients: ' + e.message);
-            }
-        }
+var closeSidebarBtn = document.querySelector('.close-btn');
+if (closeSidebarBtn) {
+closeSidebarBtn.addEventListener('click', closeSidebar);
+console.log('Close sidebar button listener added');
+}
 
-        function toggleInputForm() {
-            try {
-                console.log('Header Add Client button clicked');
-                var inputForm = document.getElementById('inputForm');
-                if (!inputForm) {
-                    console.error('Input form not found');
-                    alert('Error: Input form not found');
-                    return;
-                }
-                inputForm.style.display = inputForm.style.display === 'flex' ? 'none' : 'flex';
-                console.log('Form display set to:', inputForm.style.display);
-            } catch (e) {
-                console.error('Toggle form failed:', e);
-                alert('Error toggling form: ' + e.message);
-            }
-        }
+var backArrow = document.querySelector('.back-arrow');
+if (backArrow) {
+backArrow.addEventListener('click', closeSidebar);
+console.log('Back arrow listener added');
+}
 
-        function addClient() {
-            try {
-                console.log('Add Client button clicked');
-                var firstName = document.getElementById('firstName').value.trim();
-                var lastName = document.getElementById('lastName').value.trim();
-                var boat = document.getElementById('boat').value.trim();
-                var dateScheduled = document.getElementById('dateScheduled').value;
-                var service = document.getElementById('service').value;
-                var notes = document.getElementById('notes').value;
-                var amount = parseFloat(document.getElementById('amount').value) || 0;
-                var paymentMethod = document.getElementById('paymentMethod').value;
-                var status = document.getElementById('status').value || 'New';
+renderClients();
+updateTotals();
+} catch (e) {
+console.error('Initialization failed:', e);
+alert('Error initializing: ' + e.message);
+}
+});
+</script>
 
-                if (firstName && lastName && boat) {
-                    var newClient = {
-                        firstName: firstName,
-                        lastName: lastName,
-                        boat: boat,
-                        dateScheduled: formatDate(dateScheduled),
-                        service: service,
-                        notes: notes,
-                        amount: amount,
-                        datePaid: '',
-                        paymentMethod: paymentMethod,
-                        status: status,
-                        address: '',
-                        phone: '',
-                        email: '',
-                        other: '',
-                        photos: []
-                    };
-                    db.collection('clients').add(newClient).then(function() {
-                        console.log('Client added to Firestore');
-                        document.getElementById('firstName').value = '';
-                        document.getElementById('lastName').value = '';
-                        document.getElementById('boat').value = '';
-                        document.getElementById('dateScheduled').value = '';
-                        document.getElementById('service').value = '';
-                        document.getElementById('notes').value = '';
-                        document.getElementById('amount').value = '';
-                        document.getElementById('paymentMethod').value = '';
-                        document.getElementById('status').value = 'New';
-                        toggleInputForm();
-                    }).catch(function(e) {
-                        console.error('Error adding client to Firestore:', e);
-                        alert('Error adding client: ' + e.message);
-                    });
-                } else {
-                    console.log('Validation failed: Missing required fields');
-                    alert('Please fill in First Name, Last Name, and Boat Make/Model.');
-                }
-            } catch (e) {
-                console.error('Add client failed:', e);
-                alert('Error adding client: ' + e.message);
-            }
-        }
-
-        function sortClients() {
-            try {
-                console.log('Sort by Name clicked');
-                clients.sort(function(a, b) {
-                    return (a.lastName + ' ' + a.firstName).localeCompare(b.lastName + ' ' + b.firstName);
-                });
-                renderClients();
-                updateTotals();
-            } catch (e) {
-                console.error('Sort failed:', e);
-            }
-        }
-
-        function updateClient(clientId, field, value) {
-            try {
-                var updateData = {};
-                if (field === 'amount') {
-                    value = parseFloat(value) || 0;
-                }
-                if (field === 'dateScheduled' || field === 'datePaid') {
-                    value = formatDate(value);
-                }
-                updateData[field] = value;
-                db.collection('clients').doc(clientId).update(updateData).catch(function(e) {
-                    console.error('Update client failed:', e);
-                    alert('Error updating client: ' + e.message);
-                });
-            } catch (e) {
-                console.error('Update client failed:', e);
-            }
-        }
-
-        function moveClient(clientId, direction) {
-            try {
-                var client = clients.find(function(c) { return c.id === clientId; });
-                if (!client) return;
-                var currentStageIndex = stages.indexOf(client.status);
-                var newStageIndex = direction === 'forward' ? currentStageIndex + 1 : currentStageIndex - 1;
-                if (newStageIndex >= 0 && newStageIndex < stages.length) {
-                    db.collection('clients').doc(clientId).update({
-                        status: stages[newStageIndex]
-                    }).catch(function(e) {
-                        console.error('Move client failed:', e);
-                        alert('Error moving client: ' + e.message);
-                    });
-                }
-            } catch (e) {
-                console.error('Move client failed:', e);
-            }
-        }
-
-        function renderClients() {
-            try {
-                var stageElements = document.querySelectorAll('.stage');
-                stageElements.forEach(function(stage) {
-                    var dropzone = stage.querySelector('.dropzone');
-                    dropzone.innerHTML = '';
-                    var status = stage.dataset.status;
-                    clients.filter(function(client) {
-                        return client.status === status;
-                    }).forEach(function(client) {
-                        var card = document.createElement('div');
-                        card.className = 'card';
-                        card.dataset.id = client.id;
-                        var isFirstStage = status === 'New';
-                        var isLastStage = status === 'Closed';
-                        card.innerHTML = '<h3>' + client.boat + '</h3>' +
-                                         '<p class="amount">' + formatCurrency(client.amount) + '</p>' +
-                                         '<div class="card-actions">' +
-                                             '<button ' + (isFirstStage ? 'disabled' : '') + '>←</button>' +
-                                             '<button ' + (isLastStage ? 'disabled' : '') + '>→</button>' +
-                                         '</div>';
-                        card.querySelector('h3').addEventListener('click', function() {
-                            openSidebar(client.id);
-                        });
-                        var buttons = card.querySelectorAll('.card-actions button');
-                        buttons[0].addEventListener('click', function() {
-                            moveClient(client.id, 'backward');
-                        });
-                        buttons[1].addEventListener('click', function() {
-                            moveClient(client.id, 'forward');
-                        });
-                        dropzone.appendChild(card);
-                    });
-                });
-            } catch (e) {
-                console.error('Render clients failed:', e);
-            }
-        }
-
-        function updateTotals() {
-            try {
-                var counts = { New: 0, Quoted: 0, Scheduling: 0, Scheduled: 0, Completed: 0, Closed: 0 };
-                var totals = { New: 0, Quoted: 0, Scheduling: 0, Scheduled: 0, Completed: 0, Closed: 0 };
-                var pipelineTotal = 0;
-                clients.forEach(function(client) {
-                    counts[client.status]++;
-                    totals[client.status] += parseFloat(client.amount) || 0;
-                    if (["Scheduling", "Scheduled", "Completed"].indexOf(client.status) !== -1) {
-                        pipelineTotal += parseFloat(client.amount) || 0;
-                    }
-                });
-                document.getElementById('countNew').textContent = counts.New;
-                document.getElementById('countQuoted').textContent = counts.Quoted;
-                document.getElementById('countScheduling').textContent = counts.Scheduling;
-                document.getElementById('countScheduled').textContent = counts.Scheduled;
-                document.getElementById('countCompleted').textContent = counts.Completed;
-                document.getElementById('countClosed').textContent = counts.Closed;
-                document.getElementById('totalNew').textContent = formatCurrency(totals.New);
-                document.getElementById('totalQuoted').textContent = formatCurrency(totals.Quoted);
-                document.getElementById('totalScheduling').textContent = formatCurrency(totals.Scheduling);
-                document.getElementById('totalScheduled').textContent = formatCurrency(totals.Scheduled);
-                document.getElementById('totalCompleted').textContent = formatCurrency(totals.Completed);
-                document.getElementById('totalClosed').textContent = formatCurrency(totals.Closed);
-                document.getElementById('totalPipeline').textContent = formatCurrency(pipelineTotal);
-            } catch (e) {
-                console.error('Update totals failed:', e);
-            }
-        }
-
-        function deleteClient(clientId) {
-            try {
-                db.collection('clients').doc(clientId).delete().then(function() {
-                    console.log('Client deleted');
-                    closeSidebar();
-                }).catch(function(e) {
-                    console.error('Delete client failed:', e);
-                    alert('Error deleting client: ' + e.message);
-                });
-            } catch (e) {
-                console.error('Delete client failed:', e);
-            }
-        }
-
-        function openSidebar(clientId) {
-            try {
-                selectedClientId = clientId;
-                var sidebar = document.getElementById('sidebar');
-                sidebar.classList.remove('closing');
-                sidebar.classList.add('open');
-                renderSidebar(clientId);
-            } catch (e) {
-                console.error('Open sidebar failed:', e);
-            }
-        }
-
-        function closeSidebar() {
-            try {
-                var sidebar = document.getElementById('sidebar');
-                sidebar.classList.remove('open');
-                sidebar.classList.add('closing');
-                setTimeout(function() {
-                    if (!sidebar.classList.contains('open')) {
-                        sidebar.style.display = 'none';
-                    }
-                }, 300);
-                selectedClientId = null;
-            } catch (e) {
-                console.error('Close sidebar failed:', e);
-            }
-        }
-
-        function addPhoto(clientId, file) {
-            try {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    db.collection('clients').doc(clientId).update({
-                        photos: firebase.firestore.FieldValue.arrayUnion(e.target.result)
-                    }).catch(function(e) {
-                        console.error('Add photo failed:', e);
-                        alert('Error adding photo: ' + e.message);
-                    });
-                };
-                reader.readAsDataURL(file);
-            } catch (e) {
-                console.error('Add photo failed:', e);
-            }
-        }
-
-        function deletePhoto(clientId, photo) {
-            try {
-                db.collection('clients').doc(clientId).update({
-                    photos: firebase.firestore.FieldValue.arrayRemove(photo)
-                }).catch(function(e) {
-                    console.error('Delete photo failed:', e);
-                    alert('Error deleting photo: ' + e.message);
-                });
-            } catch (e) {
-                console.error('Delete photo failed:', e);
-            }
-        }
-
-        function renderSidebar(clientId) {
-            try {
-                var client = clients.find(function(c) { return c.id === clientId; });
-                if (!client) return;
-                var photos = client.photos || [];
-                var sidebarContent = document.getElementById('sidebarContent');
-                sidebarContent.innerHTML = 
-                    '<button id="deleteClientBtn">Delete Client</button>' +
-                    '<strong>First Name:</strong><br>' +
-                    '<input type="text" id="sidebarFirstName" value="' + (client.firstName || '') + '"><br>' +
-                    '<strong>Last Name:</strong><br>' +
-                    '<input type="text" id="sidebarLastName" value="' + (client.lastName || '') + '"><br>' +
-                    '<strong>Boat Make/Model:</strong><br>' +
-                    '<input type="text" id="sidebarBoat" value="' + (client.boat || '') + '"><br>' +
-                    '<strong>Date Scheduled:</strong><br>' +
-                    '<input type="date" id="sidebarDateScheduled" value="' + parseDate(client.dateScheduled) + '"><br>' +
-                    '<strong>Service Requested/Performed:</strong><br>' +
-                    '<textarea id="sidebarService" placeholder="Service">' + (client.service || '') + '</textarea><br>' +
-                    '<strong>General Notes:</strong><br>' +
-                    '<textarea id="sidebarNotes" placeholder="Notes">' + (client.notes || '') + '</textarea><br>' +
-                    '<strong>Amount:</strong><br>' +
-                    '<span>$</span><input type="number" id="sidebarAmount" value="' + (client.amount || 0) + '" step="0.01" min="0"><br>' +
-                    '<strong>Date Paid:</strong><br>' +
-                    '<input type="date" id="sidebarDatePaid" value="' + parseDate(client.datePaid) + '"><br>' +
-                    '<strong>Method of Payment:</strong><br>' +
-                    '<select id="sidebarPaymentMethod">' +
-                        '<option value="" ' + (client.paymentMethod === '' ? 'selected' : '') + '>Select Method</option>' +
-                        '<option value="Cash" ' + (client.paymentMethod === 'Cash' ? 'selected' : '') + '>Cash</option>' +
-                        '<option value="Credit Card" ' + (client.paymentMethod === 'Credit Card' ? 'selected' : '') + '>Credit Card</option>' +
-                        '<option value="Check" ' + (client.paymentMethod === 'Check' ? 'selected' : '') + '>Check</option>' +
-                        '<option value="Online" ' + (client.paymentMethod === 'Online' ? 'selected' : '') + '>Online</option>' +
-                    '</select><br>' +
-                    '<strong>Address:</strong><br>' +
-                    '<textarea id="sidebarAddress" placeholder="Address">' + (client.address || '') + '</textarea><br>' +
-                    '<strong>Phone Number:</strong><br>' +
-                    '<input type="tel" id="sidebarPhone" value="' + (client.phone || '') + '"><br>' +
-                    '<strong>Email:</strong><br>' +
-                    '<input type="email" id="sidebarEmail" value="' + (client.email || '') + '"><br>' +
-                    '<strong>Other:</strong><br>' +
-                    '<textarea id="sidebarOther" placeholder="Other Details">' + (client.other || '') + '</textarea><br>' +
-                    '<strong>Photos:</strong><br>' +
-                    '<input type="file" id="sidebarPhoto" accept="image/*"><br>' +
-                    '<div class="photo-gallery">' +
-                        photos.map(function(photo, photoIndex) {
-                            return '<div>' +
-                                   '<img src="' + photo + '" alt="Client Photo">' +
-                                   '<button class="deletePhotoBtn" data-photo-index="' + photoIndex + '">Delete</button>' +
-                                   '</div>';
-                        }).join('') +
-                    '</div>';
-
-                document.getElementById('deleteClientBtn').addEventListener('click', function() {
-                    deleteClient(clientId);
-                });
-                document.getElementById('sidebarFirstName').addEventListener('blur', function() {
-                    updateClient(clientId, 'firstName', this.value);
-                });
-                document.getElementById('sidebarLastName').addEventListener('blur', function() {
-                    updateClient(clientId, 'lastName', this.value);
-                });
-                document.getElementById('sidebarBoat').addEventListener('blur', function() {
-                    updateClient(clientId, 'boat', this.value);
-                });
-                document.getElementById('sidebarDateScheduled').addEventListener('blur', function() {
-                    updateClient(clientId, 'dateScheduled', this.value);
-                });
-                document.getElementById('sidebarService').addEventListener('blur', function() {
-                    updateClient(clientId, 'service', this.value);
-                });
-                document.getElementById('sidebarNotes').addEventListener('blur', function() {
-                    updateClient(clientId, 'notes', this.value);
-                });
-                document.getElementById('sidebarAmount').addEventListener('blur', function() {
-                    updateClient(clientId, 'amount', this.value);
-                });
-                document.getElementById('sidebarDatePaid').addEventListener('blur', function() {
-                    updateClient(clientId, 'datePaid', this.value);
-                });
-                document.getElementById('sidebarPaymentMethod').addEventListener('change', function() {
-                    updateClient(clientId, 'paymentMethod', this.value);
-                });
-                document.getElementById('sidebarAddress').addEventListener('blur', function() {
-                    updateClient(clientId, 'address', this.value);
-                });
-                document.getElementById('sidebarPhone').addEventListener('blur', function() {
-                    updateClient(clientId, 'phone', this.value);
-                });
-                document.getElementById('sidebarEmail').addEventListener('blur', function() {
-                    updateClient(clientId, 'email', this.value);
-                });
-                document.getElementById('sidebarOther').addEventListener('blur', function() {
-                    updateClient(clientId, 'other', this.value);
-                });
-                document.getElementById('sidebarPhoto').addEventListener('change', function() {
-                    if (this.files[0]) {
-                        addPhoto(clientId, this.files[0]);
-                    }
-                });
-                var deletePhotoButtons = sidebarContent.querySelectorAll('.deletePhotoBtn');
-                deletePhotoButtons.forEach(function(btn) {
-                    btn.addEventListener('click', function() {
-                        var photoIndex = parseInt(this.dataset.photoIndex);
-                        deletePhoto(clientId, photos[photoIndex]);
-                    });
-                });
-            } catch (e) {
-                console.error('Render sidebar failed:', e);
-                alert('Error rendering sidebar: ' + e.message);
-            }
-        }
-
-        var pipeline = document.querySelector('.pipeline');
-        pipeline.addEventListener('scroll', function() {
-            try {
-                var scrollPosition = pipeline.scrollLeft;
-                document.body.style.backgroundPositionX = '-' + (scrollPosition * 0.2) + 'px';
-            } catch (e) {
-                console.error('Pipeline scroll failed:', e);
-            }
-        });
-
-        // Load clients from Firestore
-        function loadClients() {
-            clients = [];
-            db.collection('clients').onSnapshot(function(snapshot) {
-                clients = [];
-                snapshot.forEach(function(doc) {
-                    var client = doc.data();
-                    client.id = doc.id;
-                    clients.push(client);
-                });
-                renderClients();
-                updateTotals();
-            }, function(e) {
-                console.error('Error loading clients:', e);
-                alert('Error loading clients: ' + e.message);
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded - initializing');
-            try {
-                var inputForm = document.getElementById('inputForm');
-                if (inputForm) {
-                    inputForm.style.display = 'none';
-                    console.log('Input form hidden');
-                } else {
-                    console.error('Input form not found on load');
-                    alert('Error: Input form not found on load');
-                }
-
-                var headerBtn = document.getElementById('addClientHeaderBtn');
-                if (headerBtn) {
-                    headerBtn.addEventListener('click', toggleInputForm);
-                    console.log('Header button listener added');
-                } else {
-                    console.error('Header button not found');
-                }
-
-                var addClientBtn = document.getElementById('addClientBtn');
-                if (addClientBtn) {
-                    addClientBtn.addEventListener('click', addClient);
-                    console.log('Add Client button listener added');
-                } else {
-                    console.error('Add Client button not found');
-                }
-
-                var saveBtn = document.getElementById('saveBtn');
-                if (saveBtn) {
-                    saveBtn.addEventListener('click', saveClients);
-                    console.log('Save button listener added');
-                } else {
-                    console.error('Save button not found');
-                }
-
-                var sortBtn = document.querySelector('.sort-btn');
-                if (sortBtn) {
-                    sortBtn.addEventListener('click', sortClients);
-                    console.log('Sort button listener added');
-                } else {
-                    console.error('Sort button not found');
-                }
-
-                var closeSidebarBtn = document.querySelector('.close-btn');
-                if (closeSidebarBtn) {
-                    closeSidebarBtn.addEventListener('click', closeSidebar);
-                    console.log('Close sidebar button listener added');
-                }
-
-                var backArrow = document.querySelector('.back-arrow');
-                if (backArrow) {
-                    backArrow.addEventListener('click', closeSidebar);
-                    console.log('Back arrow listener added');
-                }
-
-                loadClients();
-            } catch (e) {
-                console.error('Initialization failed:', e);
-                alert('Error initializing: ' + e.message);
-            }
-        });
-    </script>
-</body>
-</html>
+</body> </html>
